@@ -12,6 +12,14 @@ io.on('connection', function (socket) {
         socket.broadcast.emit("sendMessageToClient", message);
     })
 
+    socket.on("startTyping", function () {
+        socket.broadcast.emit("startTyping", true);
+    })
+
+    socket.on("stopTyping", function () {
+        socket.broadcast.emit("stopTyping", true);
+    })
+
     socket.on('disconnect', function () {
         console.log('socket disconnected');
     })

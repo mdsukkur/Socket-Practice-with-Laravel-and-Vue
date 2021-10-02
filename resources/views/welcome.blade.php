@@ -17,9 +17,10 @@
                     Messages
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item" v-for="message in message_lists">
-                        <span class="float-right: message.type === 0">@{{ message.message }}</span>
+                    <li class="list-group-item" v-if="message_lists.length > 0" v-for="message in message_lists">
+                        <span v-bind:class="{'float-right':message.type === 0}">@{{ message.message }}</span>
                     </li>
+                    <span class="p-3" v-if="isTyping">Someone is typing</span>
                 </ul>
             </div>
 
@@ -53,16 +54,24 @@
         },
         methods: {
             send() {
-                this.message_lists.push({message: this.newMessage, type: 0})
+                this.message_lists.push({message: this.newMessage, type: 0});
                 socket.emit('sendMessageToServer', this.newMessage);
                 this.newMessage = null;
             }
         },
-        watch() {
-
+        watch: {
+            newMessage: (val) => {
+                if (val.length > 0) socket.emit('startTyping', true);
+                else socket.emit('stopTyping', true);
+            }
         },
         created() {
-            socket.on('sendMessageToClient', (data) => this.message_lists.push({message: data, type: 1}));
+            socket.on('sendMessageToClient', (data) => {
+                this.message_lists.push({message: data, type: 1});
+                this.isTyping = false;
+            });
+            socket.on('startTyping', (data) => this.isTyping = true);
+            socket.on('stopTyping', (data) => this.isTyping = false);
         }
     })
 </script>
