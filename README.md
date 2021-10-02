@@ -5,3 +5,5 @@
    4. Generate key using "php artisan key:generate"
    5. Serve the project by "php artisan serve"
    6. Serve the nodejs by "node serve.js"
+   
+![screen-capture (8)](https://user-images.githubusercontent.com/41440795/135717976-55b2e285-f09e-4cc4-96f7-588464efe762.gif)
